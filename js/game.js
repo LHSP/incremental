@@ -16,6 +16,7 @@ var game = {
 		$('.dustCount').html(game.resources.dust);
 		$('.brickCount').html(game.resources.brick);
 		game.showResources();
+		game.save();
 	},
 	showResources: function(){
 		if(game.resources.brick > 0 || game.resources.dust >= game.parameters.dustToBrick){
@@ -54,7 +55,9 @@ var game = {
 
 
 
-
+	init: function(){
+		game.load();
+	},
 	save: function(){
 		localStorage.setItem("resources",JSON.stringify(game.resources));
 		localStorage.setItem("parameters",JSON.stringify(game.parameters));
@@ -66,6 +69,9 @@ var game = {
 };
 
 // Bindings
+$(document).ready(function(){
+	game.init();
+});
 $(document).on('click', '.gatherDust', function(){
 	game.gatherDust();
 });
