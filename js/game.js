@@ -16,7 +16,11 @@ var game = {
 		$('.dustCount').html(game.resources.dust);
 		$('.brickCount').html(game.resources.brick);
 		game.showResources();
+	},
+	autoSave: function(){
+		$('.autosaveIndicator').addClass('fadeIn');
 		game.save();
+		setTimeout(function() { $('.autosaveIndicator').removeClass('fadeIn'); }, 2000);
 	},
 	showResources: function(){
 		if(game.resources.brick > 0 || game.resources.dust >= game.parameters.dustToBrick){
@@ -32,9 +36,9 @@ var game = {
 					game.resources.brick += game.parameters.bricksPerDust;
 				} else {
 					if(i == 0){
-						console.log(game.messages.cantCreateBricks);
+						game.showMessage(game.messages.cantCreateBricks);
 					} else {
-						console.log(game.messages.cantCreateAllBricks(i, numberOfBricks));
+						game.showMessage(game.messages.cantCreateAllBricks(i, numberOfBricks));
 					}
 					break;
 				}
@@ -46,6 +50,10 @@ var game = {
 		cantCreateAllBricks: function(numberOfBricksCreated, numberOfBricksAsked) {
 			return 'There is not enough dust to create {0} bricks. Created {1} bricks.'.format(numberOfBricksAsked, numberOfBricksCreated);
 		}
+	},
+	showMessage: function(message){
+		var messageString = '<div>' + message + '</div>'
+		$('.tickerPanel').first('div').prepend(messageString);
 	},
 
 
@@ -84,4 +92,13 @@ $(document).on('click', '.saveGame', function(){
 $(document).on('click', '.loadGame', function(){
 	game.load();
 });
-var timer = setInterval(function () { game.tick() }, 100);
+var timerIterations = 0;
+var timer = setInterval(function () { 
+							game.tick();
+							if(timerIterations > 50) {
+								timerIterations = 0;
+								game.autoSave();
+							} else {
+								timerIterations++;
+							}
+						}, 100);
