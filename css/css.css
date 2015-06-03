@@ -3,7 +3,10 @@
 }
 
 .dustCount::before {
-	content: "Dust: ";
+  content: "Dust: ";
+}
+.brickCount::before {
+  content: "Bricks: ";
 }
 
 .topBar {

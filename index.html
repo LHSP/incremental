@@ -6,6 +6,7 @@
 		<!-- Optional theme -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
+		<link rel="stylesheet" href="css/progressbuttons.css">
 		<link rel="stylesheet" href="css/css.css">
 	</head>
 	<body>
@@ -22,6 +23,9 @@
 				<li>
 					<a href="#" class="loadGame">Load</a>
 				</li>
+				<li>
+					<a href="#" class="resetGame">Reset</a>
+				</li>
 			</ul>
 		</div>
 		<div class="container">
@@ -31,11 +35,18 @@
 						<div class="col-sm-3 dustCount"></div>
 						<div class="col-sm-3 brickCount hidden"></div>
 					</div>
+					<div class="row resourcePanel debug">
+						<pre>
+							<div class="col-sm-3 fireCount"></div>
+						</pre>
+					</div>
 				</div>
 				<div class="col-sm-8">
 					<div class="row tabsPanel">
-						<button class="btn btn-primary gatherDust">Gather Dust</button>
-						<button class="btn btn-primary createBrick hidden">Create Brick</button></div>
+						<button class="btn btn-primary gatherDust"></button>
+						<button class="btn btn-primary kindleFire hidden"></button>
+						<button class="btn btn-primary createBrick hidden"></button>
+						</div>
 				</div>
 				<div class="col-sm-2">
 					<div class="row tickerPanel">
@@ -51,6 +62,7 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<script src="js/extensions.js"></script>
+		<script src="js/progressbuttons.js"></script>
 		<script src="js/game.js"></script>
 	</footer>
 </html>
