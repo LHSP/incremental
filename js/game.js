@@ -1,6 +1,7 @@
 var game = {
 	resources: {
 		dust: 0,
+		scrap: 0,
 		brick: 0,
 		fire: 0,
 
@@ -12,6 +13,15 @@ var game = {
 			return false;
 		}
 	},
+	upgrades:[
+		{ active: function(){ return true; }, dust: 1 },
+		{ active: function(){ return game.flags.hasShovel;}, dust: 1.5 }
+	],
+	modifiers: {
+		dust: function(){
+			return Enumerable.From(game.upgrades).Where("$.active()").Select("$.dust").Aggregate("(x,y) => x * y");
+		}
+	},
 	parameters: {
 		dustPerClick: 1,
 		dustToBrick: -10,
@@ -19,7 +29,10 @@ var game = {
 		fireBurningPerTick: -1,
 		dustToFire: -5,
 		firePerKindle: 50,
-		strongFireCount: 1500
+		strongFireCount: 1500,
+		dustToShovel: 20,
+		scrapChance: 0.2,
+		scrapPerClick: 1
 	},
 	flags: {
 		canMakeBricks: false,
@@ -27,13 +40,17 @@ var game = {
 		hasFire: false,
 		firstKindle: true,
 		strongFire: false,
-		hasBricks: false
+		hasBricks: false,
+		canCreateStuff: false,
+		hasShovel: false,
+		hasScraps: false
 	},
 	strings: {
 		gatherDustButton: 'Gather Dust',
 		meltDustButton: 'Melt dust together',
 		createBrickButton: 'Create Brick',
-		kindleFire: 'Kindle Fire'
+		kindleFire: 'Kindle Fire',
+		createShovel: 'Create Shovel'
 	},
 	messages: {
 		cantCreateBricks: 'There is not enough dust to create a brick!',
@@ -48,7 +65,7 @@ var game = {
 	events: [
 		{
 			name: 'Thunder',
-			chance: 0.5, 
+			chance: 0.3, 
 			happens: function(){ 
 				if(!game.flags.hasFire){
 					game.resources.fire += 1000;
@@ -63,7 +80,18 @@ var game = {
 
 	// Resource functions
 	gatherDust: function(){
-		game.resources.change('dust', game.parameters.dustPerClick);
+		game.resources.change('dust', game.parameters.dustPerClick * game.modifiers.dust());
+			var thisChance = Math.random();
+			console.log(thisChance);
+		if(thisChance <= game.parameters.scrapChance){
+			game.resources.change('scrap', game.parameters.scrapPerClick);
+			game.flags.hasScraps = true;
+		}
+	},
+	createShovel: function(){
+		if(game.resources.change('dust', game.parameters.dustToShovel)){
+			game.stuff.add()
+		}
 	},
 	kindleFire: function(){
 		if(game.resources.change('dust', game.parameters.dustToFire)){
@@ -79,8 +107,7 @@ var game = {
 	},
 	createBrick: function(numberOfBricks){
 		for(i = 0; i < numberOfBricks; i++){
-			if(game.resources.dust >= game.parameters.dustToBrick){
-				game.resources.change('dust', game.parameters.dustToBrick);
+			if(game.resources.change('dust', game.parameters.dustToBrick)){
 				game.resources.change('brick', game.parameters.bricksPerDust);
 			} else {
 				if(i == 0){
@@ -120,6 +147,10 @@ var game = {
 			$('.createBrick').removeClass('hidden');
 			$('.createBrick').html(game.strings.meltDustButton);
 			$('.brickCount').removeClass('hidden');
+			$('.buildingsTab').removeClass('hidden');
+		}
+		if(game.flags.hasScraps){
+			$('.scrapCount').removeClass('hidden');
 		}
 	},
 	tick: function(){
@@ -128,6 +159,7 @@ var game = {
 		$('.dustCount').html(game.resources.dust);
 		$('.brickCount').html(game.resources.brick);
 		$('.fireCount').html(game.resources.fire);
+		$('.scrapCount').html(game.resources.scrap);
 		game.showResources();
 	},
 	autoSave: function(){
@@ -153,11 +185,11 @@ var game = {
 		};
 	},
 	init: function(){
-		game.originalResources = game.resources;
 		game.load();
 	},
 	reset: function(){
-		game.resources = game.originalResources;
+		game.resources = {};
+		game.parameters = {};
 		game.save();
 		location.reload();
 	},
@@ -182,6 +214,7 @@ $(document).ready(function(){
 	$('.progress-button').progressInitialize();
 	$('.gatherDust').html(game.strings.gatherDustButton);
 	$('.createBrick').html(game.strings.createBrickButton);
+	$('.createShovel').html(game.strings.createShovel);
 });
 $(document).on('click', '.gatherDust', function(){
 	game.gatherDust();

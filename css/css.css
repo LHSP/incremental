@@ -5,6 +5,9 @@
 .dustCount::before {
   content: "Dust: ";
 }
+.scrapCount::before {
+  content: "Scraps: ";
+}
 .brickCount::before {
   content: "Bricks: ";
 }

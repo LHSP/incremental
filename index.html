@@ -33,6 +33,7 @@
 				<div class="col-sm-2">
 					<div class="row resourcePanel">
 						<div class="col-sm-3 dustCount"></div>
+						<div class="col-sm-3 scrapCount hidden"></div>
 						<div class="col-sm-3 brickCount hidden"></div>
 					</div>
 					<div class="row resourcePanel debug">
@@ -43,10 +44,43 @@
 				</div>
 				<div class="col-sm-8">
 					<div class="row tabsPanel">
-						<button class="btn btn-primary gatherDust"></button>
-						<button class="btn btn-primary kindleFire hidden"></button>
-						<button class="btn btn-primary createBrick hidden"></button>
+						<div role="tabpanel">
+						  <!-- Nav tabs -->
+						  <ul class="nav nav-tabs" role="tablist">
+						    <li role="presentation" class="active"><a href="#resources" aria-controls="resources" role="tab" data-toggle="tab">Resources</a></li>
+						    <li role="presentation" class="buildingsTab hidden"><a href="#buildings" aria-controls="buildings" role="tab" data-toggle="tab">Buildings</a></li>
+						    <li role="presentation" class="buildingsTab hidden"><a href="#stuff" aria-controls="stuff" role="tab" data-toggle="tab">Stuff</a></li>
+						  </ul>
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane fade in active" id="resources">
+									<div class="row">
+										<div class="col-md-12">
+											<button class="btn btn-primary gatherDust"></button>
+											<button class="btn btn-primary kindleFire hidden"></button>
+											<button class="btn btn-primary createBrick hidden"></button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane fade" id="buildings">
+								<div class="row">
+									<div class="col-md-12">
+									</div>
+								</div>
+							</div>
+
+							<div role="tabpanel" class="tab-pane fade" id="stuff">
+								<div class="row">
+									<div class="col-md-12">
+										<button class="btn btn-primary createShovel"></button>
+									</div>
+								</div>
+						    </div>
+
 						</div>
+					</div>
 				</div>
 				<div class="col-sm-2">
 					<div class="row tickerPanel">
@@ -62,6 +96,8 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<script src="js/extensions.js"></script>
+		<script src="js/linq.min.js"></script>
+		<script src="js/jquery.linq.min.js"></script>
 		<script src="js/progressbuttons.js"></script>
 		<script src="js/game.js"></script>
 	</footer>
